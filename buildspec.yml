@@ -1,0 +1,13 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - mvn -B -DskipTests package
+      - mkdir -p artifact
+      - cp target/*-SNAPSHOT.jar artifact/app.jar
+      - printf "web: java -Dserver.port=$PORT -jar app.jar" > artifact/Procfile
+artifacts:
+  base-directory: artifact
+  files:
+    - app.jar
+    - Procfile
