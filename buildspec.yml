@@ -1,11 +1,18 @@
 version: 0.2
+
 phases:
   build:
     commands:
+      - echo "===== Maven package (skip tests) ====="
       - mvn -B -DskipTests package
+      - echo "===== Collect artifact ====="
       - mkdir -p artifact
-      - cp target/*-SNAPSHOT.jar artifact/app.jar
-      - printf "web: java -Dserver.port=$PORT -jar app.jar" > artifact/Procfile
+      - JAR_FILE=$(ls target/*.jar | head -n 1)
+      - if [ -z "$JAR_FILE" ]; then echo "No JAR produced under target/"; ls -al target || true; exit 1; fi
+      - cp "$JAR_FILE" artifact/app.jar
+      - echo "web: java -Dserver.port=$PORT -jar app.jar" > artifact/Procfile
+      - echo "===== Debug listing ====="
+      - ls -al artifact
 artifacts:
   base-directory: artifact
   files:
