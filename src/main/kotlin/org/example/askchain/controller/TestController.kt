@@ -36,9 +36,9 @@ class TestController(private val testService: TestService) {
     @PostMapping("/answerYesNoForWord")
     fun answerYesNoForWord(@RequestBody req: QaRequest): ResponseEntity<QaResponse> {
 
-        if (req.word.isBlank() || req.question.isBlank()) {
+        if (req.word?.isBlank() == true || req.question.isBlank()) {
             return ResponseEntity.badRequest().body(
-                QaResponse(false, req.word, req.question, "모르겠어요", "word/question 빈값")
+                QaResponse(false, 0,req.word, req.question, "모르겠어요", "word/question 빈값")
             )
         }
         return ResponseEntity.ok(testService.testAnswerYesNoForWord(req))

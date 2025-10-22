@@ -35,7 +35,7 @@ class TestService(
 
     fun testAnswerYesNoForWord(req: QaRequest): QaResponse {
 
-        val answer = llmCall.processTurn(req.word.trim(), req.question.trim())
+        val answer = req.word?.let { llmCall.processTurn(it.trim(), req.question.trim()) }
 
         val resultMap = try {
             QaResponse(
