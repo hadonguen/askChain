@@ -2,6 +2,7 @@ package org.example.askchain.service
 
 import org.example.askchain.dto.QaRequest
 import org.example.askchain.dto.QaResponse
+import org.example.askchain.dto.QaTestRequest
 import org.example.askchain.llm.LlmCall
 import org.springframework.ai.chat.model.ChatModel
 import org.springframework.stereotype.Service
@@ -33,7 +34,7 @@ class TestService(
         return resultMap
     }
 
-    fun testAnswerYesNoForWord(req: QaRequest): QaResponse {
+    fun testAnswerYesNoForWord(req: QaTestRequest): QaResponse {
 
         val answer = req.word?.let { llmCall.processTurn(it.trim(), req.question.trim()) }
 

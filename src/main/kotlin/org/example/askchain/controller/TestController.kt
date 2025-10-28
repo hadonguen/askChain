@@ -1,17 +1,14 @@
 package org.example.askchain.controller
 
-import org.example.askchain.dto.QaRequest
+import io.swagger.v3.oas.annotations.Hidden
 import org.example.askchain.dto.QaResponse
+import org.example.askchain.dto.QaTestRequest
 import org.example.askchain.service.TestService
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
+@Hidden
 @RestController
 @RequestMapping("/test")
 class TestController(private val testService: TestService) {
@@ -34,7 +31,7 @@ class TestController(private val testService: TestService) {
     }
 
     @PostMapping("/answerYesNoForWord")
-    fun answerYesNoForWord(@RequestBody req: QaRequest): ResponseEntity<QaResponse> {
+    fun answerYesNoForWord(@RequestBody req: QaTestRequest): ResponseEntity<QaResponse> {
 
         if (req.word?.isBlank() == true || req.question.isBlank()) {
             return ResponseEntity.badRequest().body(
