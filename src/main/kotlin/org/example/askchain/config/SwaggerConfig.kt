@@ -10,7 +10,12 @@ import org.springframework.context.annotation.Configuration
 class SwaggerConfig {
     @Bean
     fun openAPI(): OpenAPI =
-        OpenAPI().info(Info().title("AskChain API").version("v1"))
+        OpenAPI().info(
+            Info()
+                .title("AskChain 스무고개 API")
+                .description("OpenAI를 활용한 스무고개 게임 백엔드 API")
+                .version("v1.0.0")
+        )
 
     @Bean
     fun publicApi(): GroupedOpenApi =
