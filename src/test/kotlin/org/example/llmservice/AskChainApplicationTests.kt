@@ -1,4 +1,4 @@
-package org.example.askchain
+package org.example.llmservice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
