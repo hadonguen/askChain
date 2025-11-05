@@ -21,6 +21,10 @@ class BlindDateController(
     @GetMapping("/generate")
     fun generate(@ModelAttribute req: CharacterGenerationRequest) = ResponseEntity.ok(blindDateService.generateCharacter(req))
 
+    @Operation(
+        summary = "소개팅 대화 진행",
+        description = "소개팅 대화를 신행한다. 호감도 상대 대화 생성"
+    )
     @PostMapping("/chat")
     fun chat(@RequestBody req: ChatRequest) = ResponseEntity.ok(blindDateService.chat(req))
 

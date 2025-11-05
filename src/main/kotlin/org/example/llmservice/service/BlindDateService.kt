@@ -30,7 +30,9 @@ class BlindDateService(
         val systemPrompt = blindDateLlmCall.buildSystemPrompt(
             name = name,
             age = age,
-            config = req
+            config = req,
+            affinity = 50,
+            userName = null
         )
 
 
@@ -41,6 +43,7 @@ class BlindDateService(
             name = name,
             age = age,
             config = req,
+            userName = null,
             systemPrompt = systemPrompt
         )
         characterSelectionStore.save(session)
@@ -60,8 +63,14 @@ class BlindDateService(
         val session = characterSelectionStore.findById(req.sessionId)
             ?: throw IllegalArgumentException("세션 없음: ${req.sessionId}")
 
-        // 1) system + user 프롬프트 구성
-        val systemPrompt = session.systemPrompt
+        // ★ 매 턴마다 현재 호감도 기준으로 system 프롬프트 새로 생성
+        val systemPrompt = blindDateLlmCall.buildSystemPrompt(
+            name = session.name,
+            age = session.age,
+            config = session.config,
+            affinity = session.affinity,
+            userName = null
+        )
         val userPrompt = blindDateLlmCall.buildTurnPrompt(session, req.userMessage)
 
         // 2) GPT 호출 (JSON 문자열 기대)
@@ -72,11 +81,15 @@ class BlindDateService(
         val reply = parsed["reply"]?.asText() ?: ""
         val deltaAffinity = parsed["deltaAffinity"]?.asInt() ?: 0
 
-        // 4) 호감도 업데이트 (0~100 클램핑)
+        // 4) 사용자이름 저장
+        val callerName = session.userName?: blindDateLlmCall.detectUserNameViaLlm(reply);
+        session.userName = callerName
+
+        // 5) 호감도 업데이트 (0~100 클램핑)
         val newAffinity = (session.affinity + deltaAffinity).coerceIn(0, 100)
         session.affinity = newAffinity
 
-        // 5) 히스토리 추가
+        // 6) 히스토리 추가
         session.history.add(
             ChatTurn(
                 userMessage = req.userMessage,
@@ -85,10 +98,10 @@ class BlindDateService(
             )
         )
 
-        // 6) 세션 저장
+        // 7) 세션 저장
         characterSelectionStore.save(session)
 
-        // 7) 클라이언트 응답
+        // 8) 클라이언트 응답
         return ChatResponse(
             characterReply = reply,
             affinity = newAffinity
