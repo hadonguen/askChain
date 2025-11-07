@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/dating")
-@Tag(name = "Blind API", description = "소개팅 시뮬레이션 엔드포인트")
+@Tag(name = "Blind Date API", description = "소개팅 시뮬레이션 엔드포인트")
 class BlindDateController(
     private val blindDateService: BlindDateService
 ) {
