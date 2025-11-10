@@ -90,11 +90,11 @@ data class CharacterSelectionState(
 ) {
     fun isComplete(): Boolean =
         gender != null &&
-                ageRange != null &&
-                personalityType != null &&
-                conversationStyle != null &&
-                speakingTone != null &&
-                datingSituation != null &&
-                difficulty != null &&
-                interests.isNotEmpty()
+        ageRange != null &&
+        personalityType != null &&
+        conversationStyle != null &&
+        speakingTone != null &&
+        datingSituation != null &&
+        difficulty != null &&
+        interests.isNotEmpty()
 }
